@@ -14,9 +14,10 @@ import java.util.Properties;
  */
 public class DBManager {
     private static Connection connection = null;
+    private static DBConfig dbConfig = null;
 
     public static void initialize(String dbConfigFile) throws StatusException {
-        DBConfig dbConfig = DBConfig.getDBConfig(dbConfigFile);
+        dbConfig = DBConfig.getDBConfig(dbConfigFile);
         initialize(dbConfig);
     }
 

@@ -12,11 +12,11 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -27,43 +27,58 @@ public class FileUploadServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        albumPath = (String) getServletContext().getAttribute("AlbumStorageDir");
+        albumPath = getServletContext().getRealPath("/album");
+        System.out.println("albumPath: " + albumPath);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
-        if (!isMultipartContent) {
-            return;
-        }
+//        boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
+//        if (!isMultipartContent) {
+//            return;
+//        }
 
-        String username = (String) req.getSession().getAttribute("username");
+//        String username = (String) req.getSession().getAttribute("username");
+        String username = "root";
         User user = UserDA.find(username);
 
         DiskFileItemFactory factory = new DiskFileItemFactory();
         factory.setSizeThreshold(262144);
         factory.setFileCleaningTracker(FileCleanerCleanup.getFileCleaningTracker(this.getServletContext()));
         ServletFileUpload upload = new ServletFileUpload(factory);
-        try {
-            List items = upload.parseRequest(req);
-            items.stream().forEach(o -> {
-                FileItem item = (FileItem) o;
-                String filename = getFileName(item);
-                String filePath = String.join(albumPath, "/", username, "/", filename);
-                File file = new File(filePath);
-                try {
-                    item.write(file);
-                    Photo photo = new Photo(filename, user);
-                    AlbumDA.create(photo);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
-                }
 
-            });
-        } catch (FileUploadException e) {
-            e.printStackTrace();
+        ServletInputStream is = req.getInputStream();
+        File file = new File(albumPath + "124324");
+        OutputStream os = new FileOutputStream(file);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String line;
+        while ((line = br.readLine()) != null) {
+            os.write(line.getBytes());
         }
+        os.close();
+        br.close();
+
+//        try {
+//            List items = upload.parseRequest(req);
+//            System.out.println("size: " + items.size());
+//            items.stream().forEach(o -> {
+//                FileItem item = (FileItem) o;
+//                String filename = getFileName(item);
+//                String filePath = String.join(albumPath, "/", username, "/", filename);
+//                System.out.println(filePath);
+//                File file = new File(filePath);
+//                try {
+//                    item.write(file);
+//                    Photo photo = new Photo(filename, user);
+//                    AlbumDA.create(photo);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    return;
+//                }
+//            });
+//        } catch (FileUploadException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private String getFileExt(String filename) {

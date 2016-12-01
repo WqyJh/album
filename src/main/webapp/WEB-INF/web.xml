@@ -6,17 +6,17 @@
 
     <context-param>
         <param-name>DbConfigFile</param-name>
-        <param-value>db.properties</param-value>
+        <param-value>/etc/album/db.properties</param-value>
     </context-param>
 
     <context-param>
         <param-name>AlbumStorageDir</param-name>
-        <param-value>/tmp/album</param-value>
+        <param-value>/album</param-value>
     </context-param>
 
     <context-param>
         <param-name>upload_repo_path</param-name>
-        <param-value>/tmp/album/tmp</param-value>
+        <param-value>/album/tmp</param-value>
     </context-param>
     
     <context-param>
@@ -33,4 +33,31 @@
     <listener>
         <listener-class>com.wqy.album.ServletContextListener</listener-class>
     </listener>
+
+    <filter>
+        <filter-name>AuthenFilter</filter-name>
+        <filter-class>com.wqy.album.filter.AuthenFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.wqy.album.servlet.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/loginAction</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <servlet-class>com.wqy.album.servlet.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
 </web-app>
