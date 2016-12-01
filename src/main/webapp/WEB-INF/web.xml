@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+    <context-param>
+        <param-name>DbConfigFile</param-name>
+        <param-value>db.properties</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>AlbumStorageDir</param-name>
+        <param-value>/tmp/album</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>upload_repo_path</param-name>
+        <param-value>/tmp/album/tmp</param-value>
+    </context-param>
+    
+    <context-param>
+        <param-name>upload_threshold</param-name>
+        <param-value>262144</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>upload_max_size</param-name>
+        <param-value>8388608</param-value>
+    </context-param>
+
+    <!-- ServletContext监听器 -->
+    <listener>
+        <listener-class>com.wqy.album.ServletContextListener</listener-class>
+    </listener>
+</web-app>

@@ -1,5 +1,6 @@
 package com.wqy.album.filter;
 
+import com.wqy.album.StatusCode;
 import com.wqy.album.StatusException;
 import com.wqy.album.dao.UserDA;
 
@@ -14,15 +15,6 @@ import java.io.IOException;
  */
 public class AuthenFilter implements Filter {
 
-    public void init(FilterConfig filterConfig) throws ServletException {
-        try {
-            UserDA.initialize();
-        } catch (StatusException e) {
-            // 数据库连接异常
-            e.printStackTrace();
-        }
-    }
-
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession();
@@ -33,16 +25,7 @@ public class AuthenFilter implements Filter {
         } else {
             // 未登录，重定向到登录页面
             HttpServletResponse res = (HttpServletResponse) response;
-            res.sendRedirect("/login");
-        }
-    }
-
-    public void destroy() {
-        try {
-            UserDA.terminate();
-        } catch (StatusException e) {
-            // 数据库关闭异常
-            e.printStackTrace();
+            res.sendRedirect("/login?status=" + StatusCode.LOGIN_FAILED);
         }
     }
 }

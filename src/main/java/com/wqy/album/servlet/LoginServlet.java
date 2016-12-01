@@ -22,28 +22,15 @@ public class LoginServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         User user = new User(username, password);
-        try {
-            if (UserDA.find(user)) {
-                // 登录成功
-                HttpSession session = req.getSession();
-                session.setAttribute("username", username);
-                // TODO: 16-12-1  跳转到登录成功界面
-
-            }
-        } catch (StatusException e) {
-            e.printStackTrace();
-            switch (e.getCode()) {
-                case StatusCode.USERNAME_MISSING:
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "username cannot be empty");
-
-                    break;
-                case StatusCode.PASSWORD_MISSING:
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "password cannot be empty");
-                    break;
-                case StatusCode.USER_NOT_FOUND:
-                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "user not found");
-            }
+        int code = UserDA.find(user);
+        if (code == StatusCode.SUCCESS) {
+            // 登录成功
+            HttpSession session = req.getSession();
+            session.setAttribute("username", username);
+            // TODO: 16-12-1  跳转到登录成功界面
+            resp.sendRedirect("/album/" + username);
+        } else {
+            resp.sendRedirect("/login?status=" + StatusCode.LOGIN_FAILED + "&cause=" + code);
         }
-
     }
 }
