@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Gradle : com.wqy.album : album-1.0-SNAPSHOT.war">
+    <output-path>$PROJECT_DIR$/out/artifacts/album</output-path>
+    <properties id="gradle-properties">
+      <options external-project-path="$PROJECT_DIR$" />
+    </properties>
+    <root id="archive" name="album-1.0-SNAPSHOT.war">
+      <element id="javaee-facet-resources" facet="album_main/web/Web Gradle : album-1.0-SNAPSHOT.war" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="album_main" />
+          <element id="dir-copy" path="$PROJECT_DIR$/build/resources/main" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: mysql:mysql-connector-java:6.0.4" />
+          <element id="library" level="project" name="Gradle: org.apache.logging.log4j:log4j-core:2.7" />
+          <element id="library" level="project" name="Gradle: org.apache.logging.log4j:log4j-api:2.7" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/out/artifacts/album/exploded/album-1.0-SNAPSHOT.war/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>
