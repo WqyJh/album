@@ -26,22 +26,16 @@ public class AuthenFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        req.getSession().setAttribute("username", "root");
-//        if (req.getRequestURL().toString().contains("/login.jsp")) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-//
-//        HttpSession session = req.getSession();
-//        String username = (String) session.getAttribute("username");
-//        if (username != null) {
-//            // 已登录，继续访问
-//            chain.doFilter(request, response);
-//        } else {
-//            // 未登录，重定向到登录页面
-//            HttpServletResponse res = (HttpServletResponse) response;
-//            res.sendRedirect("/login.jsp?status=" + StatusCode.LOGIN_FAILED);
-//        }
-        chain.doFilter(request, response);
+
+        HttpSession session = req.getSession();
+        String username = (String) session.getAttribute("username");
+        if (username != null) {
+            // 已登录，继续访问
+            chain.doFilter(request, response);
+        } else {
+            // 未登录，重定向到登录页面
+            HttpServletResponse res = (HttpServletResponse) response;
+            res.sendRedirect("/login.jsp?status=" + StatusCode.LOGIN_FAILED);
+        }
     }
 }

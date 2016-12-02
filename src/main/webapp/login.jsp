@@ -38,7 +38,7 @@ function check() {
 </head>
 <body onload="check()">
 
-<form action="show.jsp" method="post" >
+<form action="/login_action" method="post" >
     <table >
         <tr >
             <td class="a" align="center">欢迎登陆</td>
@@ -56,7 +56,7 @@ function check() {
 
         <tr align="center">
             <td name="denglu" > <input type="submit"  style="background-color: aqua;"  value="登陆"></td>
-            <br><td name="zhuce" ><a href="register.jsp" >注册</a></td>
+            <br><td name="zhuce" ><a href="/register.jsp" >注册</a></td>
         </tr>
 
     </table>

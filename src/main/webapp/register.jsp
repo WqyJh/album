@@ -28,7 +28,7 @@
   </style>
 </head>
 <body>
-<form action="login.jsp" method="post" >
+<form action="/register_action" method="post" >
   <table >
     <tr >
       <td class="a" align="center">新用户注册</td>

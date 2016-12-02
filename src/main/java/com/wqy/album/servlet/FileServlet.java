@@ -39,10 +39,13 @@ public class FileServlet extends HttpServlet {
         Enumeration<String> names = config.getInitParameterNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
-            System.out.println(name);
             switch (name) {
                 case "album_storage_path":
                     albumPath = config.getInitParameter("album_storage_path");
+                    File albumDir = new File(albumPath);
+                    if (!albumDir.exists()) {
+                        albumDir.mkdir();
+                    }
                     break;
                 case "file_id_regex":
                     String idReg = config.getInitParameter("file_id_regex");
@@ -52,7 +55,6 @@ public class FileServlet extends HttpServlet {
                     String filenameReg = config.getInitParameter("file_name_regex");
                     filenamePattern = Pattern.compile(filenameReg);
                 case "upload_threshold":
-                    System.out.println(config.getInitParameter("upload_threshold"));
                     sizeThreshold = Integer.valueOf(config.getInitParameter("upload_threshold"));
                     break;
                 case "upload_tmp_dir":
@@ -131,15 +133,16 @@ public class FileServlet extends HttpServlet {
             File file = new File(fullPath);
 
             try {
-                file.createNewFile();
-                item.write(file);
+                if (file.createNewFile()) {
+                    item.write(file);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Photo photo = new Photo(filename, user);
             AlbumDA.create(photo);
         });
-
+        getServletContext().getRequestDispatcher("/album.jsp").forward(req, resp);
     }
 
     private File getUserDir(String username) {
@@ -194,7 +197,6 @@ public class FileServlet extends HttpServlet {
 
     private String getFileName(FileItem item) {
         String itemName = item.getName();
-        System.out.println(itemName);
         String filename = Common.makeString(16) + getFileExt(itemName);
         return filename;
     }

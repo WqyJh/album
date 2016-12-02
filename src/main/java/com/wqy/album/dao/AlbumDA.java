@@ -3,12 +3,15 @@ package com.wqy.album.dao;
 import com.wqy.album.StatusCode;
 import com.wqy.album.model.Photo;
 import com.wqy.album.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumDA {
+    private static final Logger logger = LogManager.getLogger(AlbumDA.class);
     private static final String SQL_CREATE_PHOTO = "INSERT INTO Album(userId, filename) VALUES (?, ?)";
     private static final String SQL_FIND_BY_USER = "SELECT _id, filename FROM Album WHERE userId = ?";
     private static final String SQL_FIND_BY_USER_LIMIT_OFFSET = "SELECT _id, filename FROM Album WHERE userId = ? LIMIT ? OFFSET ?";
@@ -24,6 +27,7 @@ public class AlbumDA {
     private static PreparedStatement findByFilenameStat;
 
     public static void initialize() throws SQLException {
+        logger.debug("initialize");
         Connection connection = DBManager.getConnection();
         createPhotoStat = connection.prepareStatement(SQL_CREATE_PHOTO);
         findByUserStat = connection.prepareStatement(SQL_FIND_BY_USER);
@@ -34,6 +38,7 @@ public class AlbumDA {
     }
 
     public static void terminate() throws SQLException {
+        logger.debug("terminate");
         createPhotoStat.close();
         findByUserStat.close();
         findByUserLimitOffsetStat.close();
@@ -66,6 +71,7 @@ public class AlbumDA {
             Photo photo = new Photo(id, filename);
             list.add(photo);
         }
+        rs.close();
         return list;
     }
 
@@ -106,6 +112,7 @@ public class AlbumDA {
                 photo.setUserId(userId);
                 return photo;
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -123,6 +130,7 @@ public class AlbumDA {
                 photo.setId(_id);
                 return photo;
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

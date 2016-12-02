@@ -24,6 +24,7 @@ public class UserDA {
     private static PreparedStatement findByIdStat;
 
     public static void initialize() throws SQLException {
+        logger.debug("initialize");
         Connection connection = DBManager.getConnection();
         createUserStat = connection.prepareStatement(SQL_CREATE_USER);
         findUserStat = connection.prepareStatement(SQL_FIND_USER);
@@ -33,6 +34,7 @@ public class UserDA {
     }
 
     public static void terminate() throws SQLException {
+        logger.debug("terminate");
         createUserStat.close();
         findUserStat.close();
         updateUserStat.close();
@@ -90,6 +92,7 @@ public class UserDA {
                 user.setId(_id);
                 return user;
             }
+            resultSet.close();
         } catch (SQLException e) {
 //            throw new StatusException(StatusCode.SERVER_ERROR);
             e.printStackTrace();
@@ -128,6 +131,7 @@ public class UserDA {
                 user.setId(id);
                 return user;
             }
+            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -21,6 +21,7 @@
           <element id="library" level="project" name="Gradle: net.bytebuddy:byte-buddy:1.5.5" />
           <element id="library" level="project" name="Gradle: net.bytebuddy:byte-buddy-agent:1.5.5" />
           <element id="library" level="project" name="Gradle: org.objenesis:objenesis:2.4" />
+          <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.0/c4ba5371a29ac9b2ad6129b1d39ea38750043eff/gson-2.8.0.jar" />
         </element>
       </element>
       <element id="directory" name="META-INF">
