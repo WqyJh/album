@@ -11,7 +11,7 @@
 
     <context-param>
         <param-name>AlbumStorageDir</param-name>
-        <param-value>/album</param-value>
+        <param-value>/tmp/album</param-value>
     </context-param>
 
     <context-param>
