@@ -10,37 +10,75 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class FileUploadServlet extends HttpServlet {
+public class FileServlet extends HttpServlet {
     private String albumPath = null;
 
     @Override
     public void init() throws ServletException {
+        System.out.println("FileServlet: init");
         albumPath = getServletContext().getInitParameter("AlbumStorageDir");
         System.out.println("albumPath: " + albumPath);
     }
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("FileServlet: doGet");
+        System.out.println(req.getRequestURI());
+        System.out.println(req.getRequestURL());
+        String url = req.getRequestURI();
+        String reg = "/file(/\\d*)?";
+        Pattern pattern = Pattern.compile(reg);
+        Matcher matcher = pattern.matcher(url);
+        if (matcher.matches()) {
+            String idString = matcher.group(1).substring(1);
+            System.out.println(idString);
+            int id = Integer.valueOf(idString);
+            System.out.println(id);
+            Photo photo = AlbumDA.find(id);
+//            String username = (String) req.getSession().getAttribute("username");
+            String username = "root";
+            String fullPath = albumPath + "/" + username + "/" + photo.getFilename();
+            System.out.println(fullPath);
+            File file = new File(fullPath);
+            if (file.exists()) {
+                String mime = getServletContext().getMimeType(photo.getFilename());
+                resp.setContentType(mime);
+                resp.addHeader("Content-Disposition", "attachment; filename=" + photo.getFilename());
+                System.out.println(file.length());
+                byte[] buffer = new byte[1024];
+                int length;
+                ServletOutputStream sos = resp.getOutputStream();
+                InputStream is = new FileInputStream(file);
+
+                while ((length = is.read(buffer)) > 0) {
+                    sos.write(buffer, 0, length);
+                }
+
+                sos.flush();
+                sos.close();
+                is.close();
+            }
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
-//        if (!isMultipartContent) {
-//            return;
-//        }
+        boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
+        if (!isMultipartContent) {
+            // TODO: 16-12-2 处理空上传
+            return;
+        }
 
 //        String username = (String) req.getSession().getAttribute("username");
         String username = "root";

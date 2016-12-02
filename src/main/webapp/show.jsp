@@ -48,7 +48,7 @@ h1{position: absolute;left:12%;top:10%;}
 <h1 class="title">我的相册</h1>
 
 <div class="file-box">
-    <form  class="form" action="/upload" method="post" enctype="multipart/form-data">
+    <form  class="form" action="/file" method="post" enctype="multipart/form-data">
         <input type='text' name='textfield' id='textfield' class='txt' />
         <input type='button' class='btn' value='浏览...' />
         <input type="file" name="fileField" class="file" id="fileField"

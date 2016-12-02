@@ -54,10 +54,11 @@
 
     <servlet>
         <servlet-name>FileUploadServlet</servlet-name>
-        <servlet-class>com.wqy.album.servlet.FileUploadServlet</servlet-class>
+        <servlet-class>com.wqy.album.servlet.FileServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>FileUploadServlet</servlet-name>
-        <url-pattern>/upload</url-pattern>
+        <url-pattern>/file</url-pattern>
+        <url-pattern>/file/*</url-pattern>
     </servlet-mapping>
 </web-app>
