@@ -5,28 +5,8 @@
          version="3.1">
 
     <context-param>
-        <param-name>DbConfigFile</param-name>
+        <param-name>db_config_file</param-name>
         <param-value>/etc/album/db.properties</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>AlbumStorageDir</param-name>
-        <param-value>/tmp/album</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>upload_repo_path</param-name>
-        <param-value>/album/tmp</param-value>
-    </context-param>
-    
-    <context-param>
-        <param-name>upload_threshold</param-name>
-        <param-value>262144</param-value>
-    </context-param>
-
-    <context-param>
-        <param-name>upload_max_size</param-name>
-        <param-value>8388608</param-value>
     </context-param>
 
     <!-- ServletContext监听器 -->
@@ -53,11 +33,42 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>FileUploadServlet</servlet-name>
+        <servlet-name>FileServlet</servlet-name>
         <servlet-class>com.wqy.album.servlet.FileServlet</servlet-class>
+
+        <init-param>
+            <param-name>file_id_regex</param-name>
+            <param-value>/file/(\d*)?</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>file_name_regex</param-name>
+            <param-value>/file/(\w+.\w+)</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>upload_threshold</param-name>
+            <param-value>262144</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>upload_tmp_dir</param-name>
+            <param-value>/tmp/album_tmp</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>upload_max_size</param-name>
+            <param-value>8388608</param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>album_storage_path</param-name>
+            <param-value>/tmp/album</param-value>
+        </init-param>
     </servlet>
+
     <servlet-mapping>
-        <servlet-name>FileUploadServlet</servlet-name>
+        <servlet-name>FileServlet</servlet-name>
         <url-pattern>/file</url-pattern>
         <url-pattern>/file/*</url-pattern>
     </servlet-mapping>

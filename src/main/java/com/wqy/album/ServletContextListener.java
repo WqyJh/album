@@ -20,7 +20,7 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
         System.out.println(context.getContextPath());
         System.out.println(context.getRealPath("/album"));
         System.out.println(context.getRealPath("/"));
-        String dbConfigFile = context.getInitParameter("DbConfigFile");
+        String dbConfigFile = context.getInitParameter("db_config_file");
         try {
             DBManager.initialize(dbConfigFile);
             Connection connection = DBManager.getConnection();

@@ -26,6 +26,7 @@ public class AuthenFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
+        req.getSession().setAttribute("username", "root");
 //        if (req.getRequestURL().toString().contains("/login.jsp")) {
 //            chain.doFilter(request, response);
 //            return;

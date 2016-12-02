@@ -8,9 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by wqy on 16-12-1.
- */
 public class AlbumDA {
     private static final String SQL_CREATE_PHOTO = "INSERT INTO Album(userId, filename) VALUES (?, ?)";
     private static final String SQL_FIND_BY_USER = "SELECT _id, filename FROM Album WHERE userId = ?";
@@ -90,7 +87,7 @@ public class AlbumDA {
             findByUserLimitOffsetStat.setInt(2, limit);
             findByUserLimitOffsetStat.setInt(3, offset);
             List<Photo> list =  find(findByUserLimitOffsetStat);
-            list.stream().forEach(photo -> photo.setUser(user));
+            list.forEach(photo -> photo.setUser(user));
             return list;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -105,11 +105,15 @@ public class AlbumDATest {
 
     @Test
     public void testDelete() {
-        int userId = 1;
+        int userId = 2;
         Photo photo = new Photo(Common.makeString(20), userId);
         assertEquals(StatusCode.SUCCESS, AlbumDA.create(photo));
 
         Photo p = AlbumDA.find(photo.getFilename());
         assertEquals(userId, p.getUserId());
+
+        assertEquals(StatusCode.SUCCESS, AlbumDA.delete(p.getId()));
+
+        assertNull(AlbumDA.find(p.getId()));
     }
 }
