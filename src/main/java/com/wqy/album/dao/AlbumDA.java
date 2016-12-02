@@ -49,11 +49,13 @@ public class AlbumDA {
 
     public static int create(Photo photo) {
         try {
-            createPhotoStat.setInt(1, photo.getUserId());
-            createPhotoStat.setString(2, photo.getFilename());
-            int res = createPhotoStat.executeUpdate();
-            if (res > 0) {
-                return StatusCode.SUCCESS;
+            synchronized (createPhotoStat) {
+                createPhotoStat.setInt(1, photo.getUserId());
+                createPhotoStat.setString(2, photo.getFilename());
+                int res = createPhotoStat.executeUpdate();
+                if (res > 0) {
+                    return StatusCode.SUCCESS;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -77,10 +79,12 @@ public class AlbumDA {
 
     public static List<Photo> find(User user) {
         try {
-            findByUserStat.setInt(1, user.getId());
-            List<Photo> list =  find(findByUserStat);
-            list.stream().forEach(photo -> photo.setUser(user));
-            return list;
+            synchronized (findByIdStat) {
+                findByUserStat.setInt(1, user.getId());
+                List<Photo> list = find(findByUserStat);
+                list.stream().forEach(photo -> photo.setUser(user));
+                return list;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -89,12 +93,14 @@ public class AlbumDA {
 
     public static List<Photo> find(User user, int limit, int offset) {
         try {
-            findByUserLimitOffsetStat.setInt(1, user.getId());
-            findByUserLimitOffsetStat.setInt(2, limit);
-            findByUserLimitOffsetStat.setInt(3, offset);
-            List<Photo> list =  find(findByUserLimitOffsetStat);
-            list.forEach(photo -> photo.setUser(user));
-            return list;
+            synchronized (findByUserLimitOffsetStat) {
+                findByUserLimitOffsetStat.setInt(1, user.getId());
+                findByUserLimitOffsetStat.setInt(2, limit);
+                findByUserLimitOffsetStat.setInt(3, offset);
+                List<Photo> list = find(findByUserLimitOffsetStat);
+                list.forEach(photo -> photo.setUser(user));
+                return list;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -103,16 +109,18 @@ public class AlbumDA {
 
     public static Photo find(int id) {
         try {
-            findByIdStat.setInt(1, id);
-            ResultSet rs = findByIdStat.executeQuery();
-            if (rs.first()) {
-                int userId = rs.getInt("userId");
-                String filename = rs.getString("filename");
-                Photo photo = new Photo(id, filename);
-                photo.setUserId(userId);
-                return photo;
+            synchronized (findByIdStat) {
+                findByIdStat.setInt(1, id);
+                ResultSet rs = findByIdStat.executeQuery();
+                if (rs.first()) {
+                    int userId = rs.getInt("userId");
+                    String filename = rs.getString("filename");
+                    Photo photo = new Photo(id, filename);
+                    photo.setUserId(userId);
+                    return photo;
+                }
+                rs.close();
             }
-            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -121,16 +129,18 @@ public class AlbumDA {
 
     public static Photo find(String filename) {
         try {
-            findByFilenameStat.setString(1, filename);
-            ResultSet rs = findByFilenameStat.executeQuery();
-            if (rs.first()) {
-                int _id = rs.getInt("_id");
-                int userId = rs.getInt("userId");
-                Photo photo = new Photo(filename, userId);
-                photo.setId(_id);
-                return photo;
+            synchronized (findByFilenameStat) {
+                findByFilenameStat.setString(1, filename);
+                ResultSet rs = findByFilenameStat.executeQuery();
+                if (rs.first()) {
+                    int _id = rs.getInt("_id");
+                    int userId = rs.getInt("userId");
+                    Photo photo = new Photo(filename, userId);
+                    photo.setId(_id);
+                    return photo;
+                }
+                rs.close();
             }
-            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -139,10 +149,12 @@ public class AlbumDA {
 
     public static int delete(int id) {
         try {
-            deleteByIdStat.setInt(1, id);
-            int res = deleteByIdStat.executeUpdate();
-            if (res > 0) {
-                return StatusCode.SUCCESS;
+            synchronized (deleteByIdStat) {
+                deleteByIdStat.setInt(1, id);
+                int res = deleteByIdStat.executeUpdate();
+                if (res > 0) {
+                    return StatusCode.SUCCESS;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -10,9 +10,9 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
 
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
@@ -43,8 +43,9 @@ public class FileServlet extends HttpServlet {
                 case "album_storage_path":
                     albumPath = config.getInitParameter("album_storage_path");
                     File albumDir = new File(albumPath);
+                    System.out.println(albumDir);
                     if (!albumDir.exists()) {
-                        albumDir.mkdir();
+                        albumDir.mkdirs();
                     }
                     break;
                 case "file_id_regex":
@@ -61,7 +62,7 @@ public class FileServlet extends HttpServlet {
                     tmpDir = config.getInitParameter("upload_tmp_dir");
                     tmpRepo = new File(tmpDir);
                     if (!tmpRepo.exists()) {
-                        tmpRepo.mkdir();
+                        tmpRepo.mkdirs();
                     }
                     break;
                 case "upload_max_size":
@@ -73,6 +74,7 @@ public class FileServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log("doGet:");
         Photo photo = null;
         try {
             int id = parsePhotoId(req);
@@ -87,6 +89,7 @@ public class FileServlet extends HttpServlet {
             String photoFilename = photo.getFilename();
             String username = (String) req.getSession().getAttribute("username");
             String fullPath = albumPath + "/" + username + "/" + photoFilename;
+            System.out.println(fullPath);
 
             File file = new File(fullPath);
             if (file.exists()) {
@@ -97,12 +100,14 @@ public class FileServlet extends HttpServlet {
                 ServletOutputStream sos = resp.getOutputStream();
                 InputStream is = new FileInputStream(file);
                 writeStream(is, sos);
+                resp.setStatus(HttpServletResponse.SC_OK);
             }
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log("doPost:");
         boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
         if (!isMultipartContent) {
             // TODO: 16-12-2 处理空上传
@@ -118,7 +123,6 @@ public class FileServlet extends HttpServlet {
         ServletFileUpload upload = new ServletFileUpload(factory);
         upload.setFileSizeMax(maxSize);
 
-
         List<FileItem> items = null;
         try {
             items = upload.parseRequest(req);
@@ -130,6 +134,7 @@ public class FileServlet extends HttpServlet {
         items.stream().filter(item -> item.getFieldName().equals("fileField")).forEach(item -> {
             String filename = getFileName(item);
             String fullPath = userDir.getAbsolutePath() + "/" + filename;
+            System.out.println("fillPath: " + fullPath);
             File file = new File(fullPath);
 
             try {

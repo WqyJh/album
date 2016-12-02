@@ -64,7 +64,7 @@
 
         <init-param>
             <param-name>upload_tmp_dir</param-name>
-            <param-value>/tmp/album_tmp</param-value>
+            <param-value>/home/wqy/Work/album/album_tmp</param-value>
         </init-param>
 
         <init-param>
@@ -74,7 +74,7 @@
 
         <init-param>
             <param-name>album_storage_path</param-name>
-            <param-value>/tmp/album</param-value>
+            <param-value>/home/wqy/Work/album</param-value>
         </init-param>
     </servlet>
 
@@ -96,4 +96,6 @@
     <welcome-file-list>
         <welcome-file>album.jsp</welcome-file>
     </welcome-file-list>
+
+
 </web-app>

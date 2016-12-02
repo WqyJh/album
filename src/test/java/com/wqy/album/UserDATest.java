@@ -6,13 +6,14 @@ import com.wqy.album.model.User;
 import com.wqy.album.util.Common;
 import org.junit.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
 
 public class UserDATest {
     @BeforeClass
-    public static void initialize() throws StatusException, SQLException {
+    public static void initialize() throws StatusException, SQLException, IOException, ClassNotFoundException {
         DBManager.initialize("db.properties");
         UserDA.initialize();
     }

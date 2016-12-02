@@ -23,7 +23,7 @@ public class UserDA {
     private static PreparedStatement deleteUserStat;
     private static PreparedStatement findByIdStat;
 
-    public static void initialize() throws SQLException {
+    public synchronized static void initialize() throws SQLException {
         logger.debug("initialize");
         Connection connection = DBManager.getConnection();
         createUserStat = connection.prepareStatement(SQL_CREATE_USER);
@@ -33,7 +33,7 @@ public class UserDA {
         findByIdStat = connection.prepareStatement(SQL_FIND_BY_ID);
     }
 
-    public static void terminate() throws SQLException {
+    public synchronized static void terminate() throws SQLException {
         logger.debug("terminate");
         createUserStat.close();
         findUserStat.close();
@@ -63,11 +63,13 @@ public class UserDA {
         }
 
         try {
-            createUserStat.setString(1, user.getUsername());
-            createUserStat.setString(2, user.getPassword());
-            int res = createUserStat.executeUpdate();
-            if (res > 0) {
-                return StatusCode.SUCCESS;
+            synchronized (createUserStat) {
+                createUserStat.setString(1, user.getUsername());
+                createUserStat.setString(2, user.getPassword());
+                int res = createUserStat.executeUpdate();
+                if (res > 0) {
+                    return StatusCode.SUCCESS;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,17 +84,19 @@ public class UserDA {
         }
 
         try {
-            findUserStat.setString(1, username);
-            ResultSet resultSet = findUserStat.executeQuery();
-            if (resultSet.first()) {
-                int _id = resultSet.getInt("_id");
-                String password = resultSet.getString("password");
+            synchronized (findUserStat) {
+                findUserStat.setString(1, username);
+                ResultSet resultSet = findUserStat.executeQuery();
+                if (resultSet.first()) {
+                    int _id = resultSet.getInt("_id");
+                    String password = resultSet.getString("password");
 
-                User user = new User(username, password);
-                user.setId(_id);
-                return user;
+                    User user = new User(username, password);
+                    user.setId(_id);
+                    return user;
+                }
+                resultSet.close();
             }
-            resultSet.close();
         } catch (SQLException e) {
 //            throw new StatusException(StatusCode.SERVER_ERROR);
             e.printStackTrace();
@@ -121,17 +125,19 @@ public class UserDA {
         }
 
         try {
-            findByIdStat.setInt(1, id);
-            ResultSet rs = findByIdStat.executeQuery();
-            if (rs.first()) {
-                String username = rs.getString("username");
-                String password = rs.getString("password");
+            synchronized (findByIdStat) {
+                findByIdStat.setInt(1, id);
+                ResultSet rs = findByIdStat.executeQuery();
+                if (rs.first()) {
+                    String username = rs.getString("username");
+                    String password = rs.getString("password");
 
-                User user = new User(username, password);
-                user.setId(id);
-                return user;
+                    User user = new User(username, password);
+                    user.setId(id);
+                    return user;
+                }
+                rs.close();
             }
-            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -146,11 +152,13 @@ public class UserDA {
         }
 
         try {
-            updateUserStat.setString(1, user.getPassword());
-            updateUserStat.setString(2, user.getUsername());
-            int res = updateUserStat.executeUpdate();
-            if (res > 0) {
-                return StatusCode.SUCCESS;
+            synchronized (updateUserStat) {
+                updateUserStat.setString(1, user.getPassword());
+                updateUserStat.setString(2, user.getUsername());
+                int res = updateUserStat.executeUpdate();
+                if (res > 0) {
+                    return StatusCode.SUCCESS;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -165,10 +173,12 @@ public class UserDA {
         }
 
         try {
-            deleteUserStat.setString(1, user.getUsername());
-            int res = deleteUserStat.executeUpdate();
-            if (res > 0) {
-                return StatusCode.SUCCESS;
+            synchronized (deleteUserStat) {
+                deleteUserStat.setString(1, user.getUsername());
+                int res = deleteUserStat.executeUpdate();
+                if (res > 0) {
+                    return StatusCode.SUCCESS;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

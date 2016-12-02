@@ -10,6 +10,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,7 +24,7 @@ import static org.junit.Assert.*;
  */
 public class AlbumDATest {
     @BeforeClass
-    public static void initialize() throws StatusException, SQLException {
+    public static void initialize() throws StatusException, SQLException, IOException, ClassNotFoundException {
         DBManager.initialize("db.properties");
         UserDA.initialize();
         AlbumDA.initialize();

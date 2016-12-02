@@ -18,12 +18,13 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+        System.out.println("register: " + username + ":" + password);
         User user = new User(username, password);
         int code = UserDA.create(user);
         if (code == StatusCode.SUCCESS) {
-            getServletContext().getRequestDispatcher("/login").forward(req, resp);
+            getServletContext().getRequestDispatcher("/login_action").forward(req, resp);
         } else {
-            resp.getWriter().write("<h1>Register failed</h1>");
+            resp.getWriter().write("<h1>Register failed:</h1>" + code);
         }
     }
 }
