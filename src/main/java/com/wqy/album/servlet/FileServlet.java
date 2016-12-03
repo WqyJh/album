@@ -1,5 +1,6 @@
 package com.wqy.album.servlet;
 
+import com.wqy.album.StatusCode;
 import com.wqy.album.dao.AlbumDA;
 import com.wqy.album.dao.UserDA;
 import com.wqy.album.model.Photo;
@@ -74,7 +75,7 @@ public class FileServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log("doGet:");
+        System.out.println("doGet:");
         Photo photo = null;
         try {
             int id = parsePhotoId(req);
@@ -107,7 +108,7 @@ public class FileServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        log("doPost:");
+        System.out.println("doPost:");
         boolean isMultipartContent = ServletFileUpload.isMultipartContent(req);
         if (!isMultipartContent) {
             // TODO: 16-12-2 处理空上传
@@ -131,15 +132,17 @@ public class FileServlet extends HttpServlet {
             return;
         }
 
-        items.stream().filter(item -> item.getFieldName().equals("fileField")).forEach(item -> {
+        items.stream().filter(item -> item.getFieldName().equals("file")).forEach(item -> {
             String filename = getFileName(item);
             String fullPath = userDir.getAbsolutePath() + "/" + filename;
-            System.out.println("fillPath: " + fullPath);
+            System.out.println("fullPath: " + fullPath);
             File file = new File(fullPath);
 
             try {
                 if (file.createNewFile()) {
                     item.write(file);
+                } else {
+                    System.out.println("create new File failed");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -147,7 +150,19 @@ public class FileServlet extends HttpServlet {
             Photo photo = new Photo(filename, user);
             AlbumDA.create(photo);
         });
-        getServletContext().getRequestDispatcher("/album.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("doDelete:");
+        int id = parsePhotoId(req);
+        int code = AlbumDA.delete(id);
+
+        if (code == StatusCode.SUCCESS) {
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } else {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Delete failed");
+        }
     }
 
     private File getUserDir(String username) {

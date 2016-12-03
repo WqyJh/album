@@ -13,9 +13,11 @@ function query(limit, offset) {
             if (res.length < limit) {
                 hasMore = false;
             }
-            res.forEach(function (item) {
-                $("#imglist").append('<li><img width="50px" height="50px" src="' + item + '"/></li>');
-            })
+            for (var i = 0; i < res.length; i++) {
+                var item = res[i];
+                var href = "/slide.jsp?limit=" + limit + "&offset=" + (offset + i);
+                $("#photos").append('<div class="item col-md-2"><a href="' + href + '"><img class="photo" src="' + item + '"/></a></div>');
+            }
         }
     });
 }

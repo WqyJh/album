@@ -33,7 +33,8 @@ public class AlbumServlet extends HttpServlet {
         int limit = Integer.parseInt(req.getParameter("limit"));
         int offset = Integer.parseInt(req.getParameter("offset"));
         List<Photo> photoList = AlbumDA.find(user, limit, offset);
-
+        System.out.println(req.getQueryString());
+        System.out.println("limit: " + limit + "  offset: " + offset);
         if (photoList != null) {
             JsonArray urls = new JsonArray();
             photoList.forEach(photo -> {

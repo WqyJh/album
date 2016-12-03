@@ -23,6 +23,8 @@
         <url-pattern>/file</url-pattern>
         <url-pattern>/album.jsp</url-pattern>
         <url-pattern>/album</url-pattern>
+        <url-pattern>/slide.jsp</url-pattern>
+        <url-pattern>/photo.jsp</url-pattern>
     </filter-mapping>
 
     <servlet>
