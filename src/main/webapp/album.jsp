@@ -9,6 +9,17 @@
 <!DOCTYPE html>
 <html xmlns:width="http://www.w3.org/1999/xhtml" xmlns:height="http://www.w3.org/1999/xhtml" xmlns:0px xmlns:0px
       lang="zh-cn">
+<%
+    int limit;
+    int offset;
+    try {
+        limit = Integer.valueOf(request.getParameter("limit"));
+        offset = Integer.valueOf(request.getParameter("offset"));
+    } catch (NumberFormatException e) {
+        limit = 15;
+        offset = 0;
+    }
+%>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,7 +51,7 @@
             display: inline-block;
             border: 1px solid #e7e7e7;
             background-color: #fefefe;
-            margin:5px;
+            margin: 5px;
         }
 
         .item:hover {
@@ -63,17 +74,16 @@
             <div class="tabbable" id="tabs-323233">
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a data-toggle="tab" href="#panel-284307">我的相册</a>
+                        <a id="album" data-toggle="tab" href="#panel-284307">我的相册</a>
                     </li>
                     <li>
-                        <a data-toggle="tab" href="#panel-948434">上传照片</a>
+                        <a id="upload" data-toggle="tab" href="#panel-948434">上传照片</a>
                     </li>
                 </ul>
                 <div class="tab-content" style="margin: auto;padding-top: 20px;">
                     <div class="tab-pane active" id="panel-284307">
                         <div id="photos" class="row">
                         </div>
-
                     </div>
                     <div class="tab-pane" id="panel-948434">
                         <div class="row">
@@ -89,19 +99,28 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <nav id="page">
+            <ul class="pager">
+                <%
+                    int prePageOffset = 0;
+                    if (offset >= limit) {
+                        prePageOffset = offset - limit;
+                    }
+                    int nextPageOffset = offset + limit;
+                    String href = "/album.jsp?limit=" + limit + "&offset=";
+                %>
+                <%if (prePageOffset < 0) {%>
+                <li class="previous"><a href="#">上一页</a></li>
+                <%} else {%>
+                <li class="previous"><a href='<%=href%><%=prePageOffset%>'>上一页</a></li>
+                <%}%>
+                <li class="next"><a href='<%=href%><%=nextPageOffset%>'>下一页</a></li>
+            </ul>
+        </nav>
+    </div>
 </div>
 <script>
-    <%
-        int limit;
-        int offset;
-        try{
-             limit = Integer.valueOf(request.getParameter("limit"));
-             offset = Integer.valueOf(request.getParameter("offset"));
-        } catch (NumberFormatException e) {
-            limit = 10;
-            offset = 0;
-        }
-    %>
     console.log("script:");
     var offset = <%=offset%>;
     var limit = <%=limit%>;
@@ -116,6 +135,7 @@
                 console.log(res);
                 if (res.length < limit) {
                     hasMore = false;
+                    $("li.next a").attr("href", "#");
                 }
                 for (var i = 0; i < res.length; i++) {
                     var item = res[i];
@@ -127,7 +147,7 @@
         });
     }
 
-    $(document).ready(function () {
+    $(function () {
         console.log("document: ready");
         query(limit, offset);
         $("#next_page").click(function () {
@@ -137,6 +157,17 @@
                 query(limit, offset);
             }
         });
+        $("#upload").click(function () {
+            $("#page").hide();
+            $("a.plupload_button.plupload_add").addClass("btn btn-primary").css("color", "#fff !important");
+            $("a.plupload_button.plupload_start").addClass("btn btn-primary").css("color", "#fff !important");
+            $("#album").click(function () {
+                location.reload();
+            })
+        });
+        $("#album").click(function () {
+            $("#page").show();
+        })
     });
 
 </script>
