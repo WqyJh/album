@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class UserDATest {
     @BeforeClass
     public static void initialize() throws StatusException, SQLException, IOException, ClassNotFoundException {
-        DBManager.initialize("db.properties");
+        DBManager.initialize("/etc/album/db.properties");
         UserDA.initialize();
     }
 

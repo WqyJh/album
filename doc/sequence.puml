@@ -1,0 +1,21 @@
+@startuml
+Client -> register.jsp : Register an account
+register.jsp -> RegisterServlet : POST username&password
+RegisterServlet --> Client : Send Redirect to login.jsp
+Client -> login.jsp : Redirect ro login.jsp
+login.jsp -> LoginServlet : Login with usernam&password
+LoginServlet --> Client : Set Cookie
+Client -> album.jsp : Redirect to album.jsp
+album.jsp -> AlbumServlet: GET Photo List
+AlbumServlet --> album.jsp : Return Photo List
+album.jsp -> FileServlet : GET photo files
+FileServlet --> album.jsp : RETURN photo files
+album.jsp --> Client : Show photos on client
+Client -> album.jsp : Request Upload Photos
+album.jsp -> FileServlet : POST files
+Client -> album.jsp : Click photos
+album.jsp -> photo.jsp : Request big photo
+photo.jsp -> FileServlet : GET file
+FileServlet --> photo.jsp : Return file
+photo.jsp --> Client : Show big photo to Client
+@enduml

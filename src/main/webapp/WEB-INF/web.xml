@@ -66,7 +66,7 @@
 
         <init-param>
             <param-name>upload_tmp_dir</param-name>
-            <param-value>/home/wqy/Work/album/album_tmp</param-value>
+            <param-value>/home/wqy/Work/album_tmp</param-value>
         </init-param>
 
         <init-param>

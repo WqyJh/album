@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 public class AlbumDATest {
     @BeforeClass
     public static void initialize() throws StatusException, SQLException, IOException, ClassNotFoundException {
-        DBManager.initialize("db.properties");
+        DBManager.initialize("/etc/album/db.properties");
         UserDA.initialize();
         AlbumDA.initialize();
     }
@@ -58,13 +58,6 @@ public class AlbumDATest {
             assertNotNull(photo);
             assertEquals(userId, photo.getUserId());
         });
-    }
-
-    @Test
-    public void testFindById() {
-        Photo photo = AlbumDA.find(3);
-        assertNotNull(photo);
-        assertEquals(3, photo.getId());
     }
 
     @Test
@@ -106,7 +99,7 @@ public class AlbumDATest {
 
     @Test
     public void testDelete() {
-        int userId = 2;
+        int userId = 1;
         Photo photo = new Photo(Common.makeString(20), userId);
         assertEquals(StatusCode.SUCCESS, AlbumDA.create(photo));
 
