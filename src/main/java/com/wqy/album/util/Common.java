@@ -8,6 +8,7 @@ import java.util.Random;
 public class Common {
     private static String possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+    // TODO: 16-12-6 Find a more efficient way to implement it.
     public static String makeString(int length) {
         Random random = new Random();
         StringBuilder sb = new StringBuilder(length);

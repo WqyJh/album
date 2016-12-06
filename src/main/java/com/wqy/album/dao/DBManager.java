@@ -9,9 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-/**
- * Created by wqy on 16-12-1.
- */
+// TODO: 16-12-6 Using a connection pool.
 public class DBManager {
     private static Connection connection = null;
     private static DBConfig dbConfig = null;

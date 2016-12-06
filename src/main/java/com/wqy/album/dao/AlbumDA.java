@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+// TODO: 16-12-6 Find a better way to handle the concurrent connection to database
 public class AlbumDA {
     private static final Logger logger = LogManager.getLogger(AlbumDA.class);
     private static final String SQL_CREATE_PHOTO = "INSERT INTO Album(userId, filename) VALUES (?, ?)";

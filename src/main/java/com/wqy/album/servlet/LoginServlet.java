@@ -29,7 +29,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = req.getSession();
             session.setAttribute("username", username);
             resp.getWriter().write("<h1>Login success</h1>");
-            // TODO: 16-12-1  跳转到登录成功界面
+            // TODO: 16-12-6 Find a better way to redirect or dispatch the request
 //            getServletContext().getRequestDispatcher("/album.jsp").forward(req, resp);
             resp.sendRedirect("/album.jsp");
         } else {

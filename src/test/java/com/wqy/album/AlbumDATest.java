@@ -19,9 +19,8 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by wqy on 16-12-1.
- */
+// TODO: 16-12-6 Improve the code coverage.
+// TODO: 16-12-6 Improve the logic of test methods.
 public class AlbumDATest {
     @BeforeClass
     public static void initialize() throws StatusException, SQLException, IOException, ClassNotFoundException {

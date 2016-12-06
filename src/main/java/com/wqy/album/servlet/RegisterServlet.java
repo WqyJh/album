@@ -24,6 +24,7 @@ public class RegisterServlet extends HttpServlet {
         if (code == StatusCode.SUCCESS) {
             getServletContext().getRequestDispatcher("/login_action").forward(req, resp);
         } else {
+            // TODO: 16-12-6 Add an error page or response
             resp.getWriter().write("<h1>Register failed:</h1>" + code);
         }
     }

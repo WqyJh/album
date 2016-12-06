@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
+// TODO: 16-12-6 Find a better way to handle the concurrent connection to database
 public class UserDA {
     private static final Logger logger = LogManager.getLogger(UserDA.class);
 

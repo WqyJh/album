@@ -1,8 +1,6 @@
 package com.wqy.album;
 
-/**
- * Created by wqy on 16-11-30.
- */
+// TODO: 16-12-6 To Use Enum to implement it.
 public class StatusCode {
 
     /**

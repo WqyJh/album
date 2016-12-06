@@ -15,6 +15,7 @@ import java.sql.SQLException;
  */
 public class ServletContextListener implements javax.servlet.ServletContextListener {
 
+    // TODO: 16-12-6 Improve Exception handling.
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext context = sce.getServletContext();
         String dbConfigFile = context.getInitParameter("db_config_file");
@@ -24,7 +25,6 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
             AlbumDA.initialize();
         } catch (StatusException e) {
             e.printStackTrace();
-            // TODO: 16-12-1 数据库异常
         } catch (SQLException e) {
             e.printStackTrace();
         } 
